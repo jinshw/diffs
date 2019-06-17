@@ -1,0 +1,24 @@
+{
+  "name": "diffs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "packageDarwin": "electron-packager . Hosts --platform=darwin --arch=x64 --icon=host.icns --out=./dist --asar --app-version=2.0.1 --ignore=\"(dist|src|docs|.gitignore|LICENSE|README.md|webpack.config*|node_modules)\"",
+    "packageWin": "electron-packager . Hosts --platform=win32 --arch=x64 --icon=host.ico  --out=./dist --asar --app-version=2.0.1 --ignore=\"(dist|src|docs|.gitignore|LICENSE|README.md|webpack.config.js|node_modules)\"",
+    "packageLinux": "electron-packager . Hosts --platform=linux --arch=x64 --icon=host.ico --out=./dist --asar --app-version=2.0.1 --ignore=\"(dist|src|docs|.gitignore|LICENSE|README.md|webpack.config.js|node_modules)\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^5.0.2",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0",
+    "select2": "^3.5.1"
+  },
+  "devDependencies": {
+    "electron-packager": "^13.1.1"
+  }
+}
