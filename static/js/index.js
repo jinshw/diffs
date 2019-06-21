@@ -508,7 +508,7 @@ function readXODRByRoad(filepath) {
                 findStr = "object[name*='" + objectName + "']"
             }
 
-            $(xmlData).find("road").each(function () {
+            $(xmlData).find("road[junction = '-1']").each(function () {
                 //获取
                 var id = $(this).attr("id");
                 options.push(id);
