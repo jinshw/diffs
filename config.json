@@ -1,0 +1,26 @@
+[
+    {
+        "code": "SgRMArrowStraight",
+        "name": "环保园红绿灯(SgRMArrowStraight)"
+    },
+    {
+        "code": "Sstreetlamp",
+        "name": "环保园路灯(Sstreetlamp)"
+    },
+    {
+        "code": "Greenbelts",
+        "name": "环保园路牌(Greenbelts)"
+    },
+    {
+        "code": "hblp",
+        "name": "环保园路牌2(hblp)"
+    },
+    {
+        "code": "SgRMStopLine11m45cm",
+        "name": "SgRMStopLine11m45cm"
+    },
+    {
+        "code": "1111",
+        "name": "1111name"
+    }
+]

@@ -178,10 +178,6 @@ Menu.setApplicationMenu(menu);
 
 
 
-
-
-
-
 let leftXMLObject = null, rightXMLObject = null;
 let xodrPath = "", xmlPath = "";
 let leftSelect2 = [], rightSelect2 = [];
@@ -189,6 +185,9 @@ let rightFile = null;
 
 // jquery初始化
 $(document).ready(function () {
+
+    initData()
+
     document.title = "Diff - "
 
     $("#successAlertClose").click(function () {
@@ -328,6 +327,11 @@ $(document).ready(function () {
             readXML(xmlPath)
         }
 
+    })
+
+    $("#runType").change(function () {
+        $("#leftFilterId").trigger("change")
+        $("#rightFilterId").trigger("change")
     })
 
     // 左侧文件打开
@@ -508,7 +512,7 @@ function readXODRByRoad(filepath) {
                 findStr = "object[name*='" + objectName + "']"
             }
 
-            $(xmlData).find("road[junction = '-1']").each(function () {
+            $(xmlData).find("road[name = '']").each(function () {
                 //获取
                 var id = $(this).attr("id");
                 options.push(id);
@@ -552,7 +556,7 @@ function readXODRByJunction(filepath) {
             } else {
                 findStr = "object[name*='" + objectName + "']"
             }
-            $(xmlData).find("road[junction != '-1']").each(function () {
+            $(xmlData).find("road[name != '']").each(function () {
                 //获取
                 var id = $(this).attr("id");
                 options.push(id);
@@ -949,6 +953,7 @@ function replaceAllXMLNode(id) {
     let objectsLeft = $(leftXMLObject).find("road[id='" + id + "']").children("objects")
     // 判断右侧xml中是否有该id的road
     var rightRoads = $(rightXMLObject).find("road[id='" + id + "']")
+    var rightObjects = $(rightXMLObject).find("road[id='" + id + "']").children("objects")
     if (rightRoads.length == 0) {//右侧没有该road,则新增road 
         // if(id=="2022"){
         //     debugger;
@@ -957,17 +962,23 @@ function replaceAllXMLNode(id) {
         $newroad.append(objectsLeft.prop("outerHTML"))
         $(rightXMLObject).find("OpenDriveData").append($newroad.prop("outerHTML"))
     } else {//右侧有该road，替换road下边的objects
+        if (rightObjects.length == 0) {
+            $(rightRoads).append(objectsLeft.prop("outerHTML"))
+        } else {
+            // 删除右侧road下所有objects节点
+            let objectsRight = $(rightXMLObject).find("road[id='" + id + "']").children("objects")[0]
+            if (objectsRight == 'undefined' || objectsRight == null) {//right 没有该id的road
 
-        // 删除右侧road下所有objects节点
-        let objectsRight = $(rightXMLObject).find("road[id='" + id + "']").children("objects")[0]
-        if (objectsRight == 'undefined' || objectsRight == null) {//right 没有该id的road
-            let $newroad = $('<road id="' + id + '" name="" pretype="junction" pre="19001" suctype="junction" suc="19004" leftcurve="18003,grass" rightcurve="17022,spec_concrete_3d"></road>')
-            $newroad.append(objectsLeft.prop("outerHTML"))
-            $(rightXMLObject).find("OpenDriveData").append($newroad.prop("outerHTML"))
-        } else {// right 有该id的road 
-            objectsRight.remove()
-            $(rightXMLObject).find("road[id='" + id + "']").append(objectsLeft.prop("outerHTML"))
+                let $newroad = $('<road id="' + id + '" name="" pretype="junction" pre="19001" suctype="junction" suc="19004" leftcurve="18003,grass" rightcurve="17022,spec_concrete_3d"></road>')
+                $newroad.append(objectsLeft.prop("outerHTML"))
+                $(rightXMLObject).find("OpenDriveData").append($newroad.prop("outerHTML"))
+            } else {// right 有该id的road 
+                objectsRight.remove()
+                $(rightXMLObject).find("road[id='" + id + "']").append(objectsLeft.prop("outerHTML"))
+            }
         }
+
+
 
 
 
@@ -1021,17 +1032,15 @@ function saveRightXML() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// 初始化配置数据
+function initData() {
+    fs.readFile('config.json', 'utf8', function (err, data) {
+        console.log(data);
+        var typeArr = JSON.parse(data)
+        var obj = null;
+        for (var i in typeArr) {
+            obj = typeArr[i]
+            $("#objectName").append('<option value="' + obj.code + '">' + obj.name + '</option>');
+        }
+    });
+}
